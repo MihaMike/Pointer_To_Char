@@ -1,0 +1,248 @@
+Terminals which are not used
+
+   ILLEGAL
+
+
+Grammar
+
+    0 $accept: f $end
+
+    1 f: /* empty */
+    2  | f t v ENDL
+    3  | f ENDL
+    4  | f error ENDL
+
+    5 v: VAR
+    6  | LPAR v RPAR
+    7  | LPAR AST v RPAR
+    8  | v BRACKETS
+
+    9 t: TYPE_CHAR
+   10  | TYPE_INT
+   11  | LPAR t RPAR
+   12  | t AST
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 4
+VAR (258) 5
+TYPE_INT (259) 10
+TYPE_CHAR (260) 9
+ENDL (261) 2 3 4
+LPAR (262) 6 7 11
+RPAR (263) 6 7 11
+ILLEGAL (264)
+AST (265) 7 12
+BRACKETS (266) 8
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+f (13)
+    on left: 1 2 3 4, on right: 0 2 3 4
+v (14)
+    on left: 5 6 7 8, on right: 2 6 7 8
+t (15)
+    on left: 9 10 11 12, on right: 2 11 12
+
+
+state 0
+
+    0 $accept: . f $end
+
+    $default  reduce using rule 1 (f)
+
+    f  go to state 1
+
+
+state 1
+
+    0 $accept: f . $end
+    2 f: f . t v ENDL
+    3  | f . ENDL
+    4  | f . error ENDL
+
+    $end       shift, and go to state 2
+    error      shift, and go to state 3
+    TYPE_INT   shift, and go to state 4
+    TYPE_CHAR  shift, and go to state 5
+    ENDL       shift, and go to state 6
+    LPAR       shift, and go to state 7
+
+    t  go to state 8
+
+
+state 2
+
+    0 $accept: f $end .
+
+    $default  accept
+
+
+state 3
+
+    4 f: f error . ENDL
+
+    ENDL  shift, and go to state 9
+
+
+state 4
+
+   10 t: TYPE_INT .
+
+    $default  reduce using rule 10 (t)
+
+
+state 5
+
+    9 t: TYPE_CHAR .
+
+    $default  reduce using rule 9 (t)
+
+
+state 6
+
+    3 f: f ENDL .
+
+    $default  reduce using rule 3 (f)
+
+
+state 7
+
+   11 t: LPAR . t RPAR
+
+    TYPE_INT   shift, and go to state 4
+    TYPE_CHAR  shift, and go to state 5
+    LPAR       shift, and go to state 7
+
+    t  go to state 10
+
+
+state 8
+
+    2 f: f t . v ENDL
+   12 t: t . AST
+
+    VAR   shift, and go to state 11
+    LPAR  shift, and go to state 12
+    AST   shift, and go to state 13
+
+    v  go to state 14
+
+
+state 9
+
+    4 f: f error ENDL .
+
+    $default  reduce using rule 4 (f)
+
+
+state 10
+
+   11 t: LPAR t . RPAR
+   12  | t . AST
+
+    RPAR  shift, and go to state 15
+    AST   shift, and go to state 13
+
+
+state 11
+
+    5 v: VAR .
+
+    $default  reduce using rule 5 (v)
+
+
+state 12
+
+    6 v: LPAR . v RPAR
+    7  | LPAR . AST v RPAR
+
+    VAR   shift, and go to state 11
+    LPAR  shift, and go to state 12
+    AST   shift, and go to state 16
+
+    v  go to state 17
+
+
+state 13
+
+   12 t: t AST .
+
+    $default  reduce using rule 12 (t)
+
+
+state 14
+
+    2 f: f t v . ENDL
+    8 v: v . BRACKETS
+
+    ENDL      shift, and go to state 18
+    BRACKETS  shift, and go to state 19
+
+
+state 15
+
+   11 t: LPAR t RPAR .
+
+    $default  reduce using rule 11 (t)
+
+
+state 16
+
+    7 v: LPAR AST . v RPAR
+
+    VAR   shift, and go to state 11
+    LPAR  shift, and go to state 12
+
+    v  go to state 20
+
+
+state 17
+
+    6 v: LPAR v . RPAR
+    8  | v . BRACKETS
+
+    RPAR      shift, and go to state 21
+    BRACKETS  shift, and go to state 19
+
+
+state 18
+
+    2 f: f t v ENDL .
+
+    $default  reduce using rule 2 (f)
+
+
+state 19
+
+    8 v: v BRACKETS .
+
+    $default  reduce using rule 8 (v)
+
+
+state 20
+
+    7 v: LPAR AST v . RPAR
+    8  | v . BRACKETS
+
+    RPAR      shift, and go to state 22
+    BRACKETS  shift, and go to state 19
+
+
+state 21
+
+    6 v: LPAR v RPAR .
+
+    $default  reduce using rule 6 (v)
+
+
+state 22
+
+    7 v: LPAR AST v RPAR .
+
+    $default  reduce using rule 7 (v)
